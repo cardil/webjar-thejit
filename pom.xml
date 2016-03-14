@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pl.wavesoftware</groupId>
+    <artifactId>thejit</artifactId>
+    <version>2.0.1.53-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Webjar The JIT</name>
+    <description>Webjar for The JIT</description>
+
+    <properties>
+        <netbeans.hint.license>apache20</netbeans.hint.license>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <sonar.working.directory>${project.build.directory}/sonar</sonar.working.directory>
+        <sonar.java.source>6</sonar.java.source>
+        <java.source.version>${sonar.java.source}</java.source.version>
+        <maven.compiler.source>1.${java.source.version}</maven.compiler.source>
+        <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+
+        <scm.thejit.version>cardil/2.0.1-53</scm.thejit.version>
+        <scm.thejit.checkout>${project.build.directory}/jit</scm.thejit.checkout>
+    </properties>
+
+    <url>http://github.com/caril/webjar-thejit/</url>
+
+    <developers>
+        <developer>
+            <id>cardil</id>
+            <name>Krzysztof Suszyński</name>
+            <email>krzysztof.suszynski@wavesoftware.pl</email>
+            <organization>Wave Software</organization>
+            <organizationUrl>http://wavesoftware.pl/</organizationUrl>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>Wave Software</name>
+        <url>http://wavesoftware.pl/</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/cardil/webjar-thejit.git</connection>
+        <developerConnection>scm:git:git@github.com:cardil/webjar-thejit.git</developerConnection>
+        <url>https://github.com/cardil/webjar-thejit</url>
+    </scm>
+
+    <ciManagement>
+        <system>travis-ci</system>
+        <url>https://travis-ci.org/cardil/webjar-thejit</url>
+    </ciManagement>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/jit/Jit</directory>
+                <includes>
+                    <include>**/*.js</include>
+                </includes>
+                <filtering>false</filtering>
+                <targetPath>META-INF/resources/webjars/${project.artifactId}/${project.version}</targetPath>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9.4</version>
+                <executions>
+                    <execution>
+                        <id>checkout-thejit</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>checkout</goal>
+                        </goals>
+                        <configuration>
+                            <checkoutDirectory>${scm.thejit.checkout}</checkoutDirectory>
+                            <connectionType>developerConnection</connectionType>
+                            <developerConnectionUrl>scm:git:https://github.com/cardil/jit.git</developerConnectionUrl>
+                            <scmVersion>${scm.thejit.version}</scmVersion>
+                            <scmVersionType>branch</scmVersionType>
+                            <includes>**/*</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <id>build-python</id>
+                        <phase>generate-resources</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration>
+                            <executable>python</executable>
+                            <!-- optional -->
+                            <workingDirectory>${scm.thejit.checkout}</workingDirectory>
+                            <arguments>
+                                <argument>make.py</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
