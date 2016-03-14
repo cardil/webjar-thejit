@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.wavesoftware.webjars</groupId>
     <artifactId>thejit</artifactId>
-    <version>2.0.1.53-SNAPSHOT</version>
+    <version>2.0.1.53</version>
     <packaging>jar</packaging>
     <name>Webjar The JIT</name>
     <description>Webjar for The JIT</description>
